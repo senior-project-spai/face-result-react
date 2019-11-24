@@ -120,12 +120,14 @@ function FaceResultDisplaySkeleton(props) {
 }
 
 function FaceResultDisplay(props) {
+  const [fetchError, setFetchError] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [responseData, setResponseData] = useState(undefined);
 
   const fetchData = async () => {
     if (fetching) return;
     setFetching(true);
+    setFetchError(false);
     try {
       const res = await fetch(
         "https://face-result-api-spai.apps.spai.ml/_api/result/latest"
@@ -133,12 +135,14 @@ function FaceResultDisplay(props) {
       const json = await res.json();
       setResponseData(json);
     } catch (error) {
+      setFetchError(true);
       console.error(error);
     }
     setFetching(false);
   };
 
   useInterval(fetchData, 5000);
+  useEffect(() => fetchData(), []);
 
   const classes = useStyles();
 
@@ -148,7 +152,12 @@ function FaceResultDisplay(props) {
 
   return (
     <>
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        color={fetchError ? "error" : "initial"}
+      >
         Face Recognition Result {fetching && <CircularProgress size={24} />}
       </Typography>
       <Grid container spacing={3}>
