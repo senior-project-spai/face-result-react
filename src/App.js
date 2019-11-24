@@ -167,7 +167,7 @@ function FaceResultDisplay(props) {
               </ListItemAvatar>
               <ListItemText
                 primary="Branch ID"
-                secondary={responseData["brach_id"]}
+                secondary={responseData["branch_id"]}
               />
             </Grid>
             <Grid item xs={6} container alignItems="center">
@@ -181,53 +181,60 @@ function FaceResultDisplay(props) {
                 secondary={responseData["camera_id"]}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="button">Inference</Typography>
-            </Grid>
-            <Grid item xs={6} container alignItems="center">
-              <ListItemAvatar>
-                <Avatar>
-                  <WcIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary="Gender"
-                secondary={responseData["gender"]}
-              />
-            </Grid>
-            <Grid item xs={6} container alignItems="center">
-              <ListItemAvatar>
-                <Avatar>
-                  <FontAwesomeIcon icon={faPercent} />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary="Confidence"
-                secondary={responseData["gender_confident"].toFixed(2)}
-              />
-            </Grid>
-            <Grid item xs={6} container alignItems="center">
-              <ListItemAvatar>
-                <Avatar>
-                  <LanguageIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary="Race" secondary={responseData["race"]} />
-            </Grid>
-            <Grid item xs={6} container alignItems="center">
-              <ListItemAvatar>
-                <Avatar>
-                  <FontAwesomeIcon icon={faPercent} />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary="Confidence"
-                secondary={responseData["race_confident"].toFixed(2)}
-              />
-            </Grid>
+            {responseData["results"].map(result => (
+              <>
+                <Grid item xs={12}>
+                  <Divider />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="button">Inference</Typography>
+                </Grid>
+                <Grid item xs={6} container alignItems="center">
+                  <ListItemAvatar>
+                    <Avatar>
+                      <WcIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Gender"
+                    secondary={result["gender"]["gender"]}
+                  />
+                </Grid>
+                <Grid item xs={6} container alignItems="center">
+                  <ListItemAvatar>
+                    <Avatar>
+                      <FontAwesomeIcon icon={faPercent} />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Confidence"
+                    secondary={result["gender"]["confidence"].toFixed(2)}
+                  />
+                </Grid>
+                <Grid item xs={6} container alignItems="center">
+                  <ListItemAvatar>
+                    <Avatar>
+                      <LanguageIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Race"
+                    secondary={result["race"]["race"]}
+                  />
+                </Grid>
+                <Grid item xs={6} container alignItems="center">
+                  <ListItemAvatar>
+                    <Avatar>
+                      <FontAwesomeIcon icon={faPercent} />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Confidence"
+                    secondary={result["race"]["confidence"].toFixed(2)}
+                  />
+                </Grid>
+              </>
+            ))}
           </Grid>
         </Paper>
       </Grid>
