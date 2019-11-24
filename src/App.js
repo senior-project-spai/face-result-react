@@ -181,13 +181,13 @@ function FaceResultDisplay(props) {
                 secondary={responseData["camera_id"]}
               />
             </Grid>
-            {responseData["results"].map(result => (
+            {responseData["results"].map((result, index) => (
               <>
                 <Grid item xs={12}>
                   <Divider />
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="button">Inference</Typography>
+                  <Typography variant="button">Face Number: {index}</Typography>
                 </Grid>
                 <Grid item xs={6} container alignItems="center">
                   <ListItemAvatar>
