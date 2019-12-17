@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function useInterval(callback, delay) {
+function useMyInterval(callback, delay) {
   const savedCallback = useRef();
 
   // Remember the latest callback.
@@ -49,6 +49,7 @@ function useInterval(callback, delay) {
     function tick() {
       savedCallback.current();
     }
+    tick(); // call immediately
     if (delay !== null) {
       let id = setInterval(tick, delay);
       return () => clearInterval(id);
@@ -141,8 +142,7 @@ function FaceResultDisplay(props) {
     setFetching(false);
   };
 
-  useInterval(fetchData, 5000);
-  useEffect(() => fetchData(), []);
+  useMyInterval(fetchData, 5000);
 
   const classes = useStyles();
 
