@@ -4,8 +4,7 @@ import {
   Container,
   Grid,
   ListItemText,
-  ListItemAvatar,
-  Avatar,
+  ListItemIcon,
   Divider,
   CardHeader,
   Card,
@@ -25,16 +24,18 @@ import LinkedCameraIcon from "@material-ui/icons/LinkedCamera";
 import StoreIcon from "@material-ui/icons/Store";
 import HistoryIcon from "@material-ui/icons/History";
 
-import Loading from './Loading'
+import Loading from "./Loading";
 
 // MOCK
 // import { response as MOCK_RESPONSE } from "./mock";
+
+const FACE_RESULT_API_URL =
+  "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/latest";
 
 const useStyles = makeStyles(theme => ({
   imgResponsive: {
     display: "block",
     width: "100%",
-    maxWidth: "500px",
     margin: "auto"
   },
   dataPaper: {
@@ -75,12 +76,10 @@ function FaceResultDisplay(props) {
     try {
       /* ------------------------------ MOCK RESPONSE ----------------------------- */
       // setResponseData(MOCK_RESPONSE);
-      // setFetching(false)
-      // return
+      // setFetching(false);
+      // return;
       /* -------------------------------------------------------------------------- */
-      const res = await fetch(
-        "https://face-result-api-spai.apps.spai.ml/_api/result/latest"
-      );
+      const res = await fetch(FACE_RESULT_API_URL);
       const json = await res.json();
       setResponseData(json);
     } catch (error) {
@@ -95,106 +94,103 @@ function FaceResultDisplay(props) {
   const classes = useStyles();
 
   if (!responseData) return <Loading />;
-  
+
   return (
     <Box paddingY={3}>
       <Container maxWidth="lg" fixed>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardHeader title="Photo" />
-            <Divider />
-            <Box overflow="hidden" bgcolor="grey.100">
-              <img
-                alt="preview"
-                className={classes.imgResponsive}
-                src={responseData["photo_data_uri"]}
-              />
-            </Box>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardHeader title="Information" />
-            <Divider />
-            <List>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardHeader title="Photo" />
+              <Divider />
+              <Box overflow="hidden" bgcolor="grey.100">
+                <img
+                  alt="preview"
+                  className={classes.imgResponsive}
+                  src={responseData["photo_data_uri"]}
+                />
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardHeader title="Detail" />
+              <Divider />
+              <List>
+                <ListItem>
+                  <ListItemIcon>
                     <HistoryIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Date"
-                  secondary={new Date(
-                    responseData["epoch"] * 1000
-                  ).toLocaleString("en-US", {
-                    hour12: false,
-                    timeZoneName: "short"
-                  })}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Date"
+                    secondary={new Date(
+                      responseData["epoch"] * 1000
+                    ).toLocaleString("en-US", {
+                      hour12: false,
+                      timeZoneName: "short"
+                    })}
+                  />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemIcon>
                     <StoreIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Branch ID"
-                  secondary={responseData["branch_id"]}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Branch ID"
+                    secondary={responseData["branch_id"]}
+                  />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemIcon>
                     <LinkedCameraIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Camera ID"
-                  secondary={responseData["camera_id"]}
-                />
-              </ListItem>
-            </List>
-          </Card>
-        </Grid>
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader title="Inferences" />
-            <Divider />
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>No.</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Confidence</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Confidence</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {responseData["results"].map((result, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th">{index}</TableCell>
-                      <TableCell>{result["gender"]["gender"]}</TableCell>
-                      <TableCell>
-                        {Math.round(result["gender"]["confidence"] * 10000) /
-                          100}
-                      </TableCell>
-                      <TableCell>{result["race"]["race"]}</TableCell>
-                      <TableCell>
-                        {Math.round(result["race"]["confidence"] * 10000) / 100}
-                      </TableCell>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Camera ID"
+                    secondary={responseData["camera_id"]}
+                  />
+                </ListItem>
+              </List>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card>
+              <CardHeader title="Inferences" />
+              <Divider />
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>No.</TableCell>
+                      <TableCell>Gender</TableCell>
+                      <TableCell>Confidence (%)</TableCell>
+                      <TableCell>Race</TableCell>
+                      <TableCell>Confidence (%)</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Card>
+                  </TableHead>
+                  <TableBody>
+                    {responseData["results"].map((result, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th">{index}</TableCell>
+                        <TableCell>{result["gender"]["gender"]}</TableCell>
+                        <TableCell>
+                          {Math.round(result["gender"]["confidence"] * 10000) /
+                            100}
+                        </TableCell>
+                        <TableCell>{result["race"]["race"]}</TableCell>
+                        <TableCell>
+                          {Math.round(result["race"]["confidence"] * 10000) /
+                            100}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
       </Container>
     </Box>
   );
