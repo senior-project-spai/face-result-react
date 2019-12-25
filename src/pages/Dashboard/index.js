@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 
-const DASHBOARD_URL = "https://grafana-spai.apps.spai.ml/d/9fXWS0TWz/test_data?orgId=1&refresh=5s&theme=light";
+const DASHBOARD_URL = "https://grafana-spai.apps.spai.ml/d/9fXWS0TWz/test_data?orgId=1&refresh=5s&theme=dark";
 
 const useStyles = makeStyles(theme => ({
   iframe: {
