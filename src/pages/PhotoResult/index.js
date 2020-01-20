@@ -173,12 +173,12 @@ function FaceResultDisplay(props) {
                     {responseData["results"].map((result, index) => (
                       <TableRow key={index}>
                         <TableCell component="th">{index}</TableCell>
-                        <TableCell>{result["gender"]["gender"]}</TableCell>
+                        <TableCell>{result["gender"]["type"]}</TableCell>
                         <TableCell>
                           {Math.round(result["gender"]["confidence"] * 10000) /
                             100}
                         </TableCell>
-                        <TableCell>{result["race"]["race"]}</TableCell>
+                        <TableCell>{result["race"]["type"]}</TableCell>
                         <TableCell>
                           {Math.round(result["race"]["confidence"] * 10000) /
                             100}
