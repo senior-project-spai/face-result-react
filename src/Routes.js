@@ -3,6 +3,7 @@ import { Switch, Redirect, Route } from "react-router-dom";
 
 import PhotoResultPage from "./pages/PhotoResult";
 import DashboardPage from "./pages/Dashboard";
+import DownloadPage from "./pages/Download";
 import MainLayout from "./layouts/Main";
 
 const Routes = props => {
@@ -24,6 +25,15 @@ const Routes = props => {
         render={matchProps => (
           <MainLayout>
             <DashboardPage />
+          </MainLayout>
+        )}
+      />
+      <Route
+        exact
+        path="/download"
+        render={matchProps => (
+          <MainLayout>
+            <DownloadPage />
           </MainLayout>
         )}
       />

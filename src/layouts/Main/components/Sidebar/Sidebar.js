@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Drawer } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ImageIcon from "@material-ui/icons/Image";
-
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 
 import { SidebarNav } from "./components";
 
@@ -47,6 +47,11 @@ const Sidebar = props => {
       title: "Dashboard",
       href: "/dashboard",
       icon: <DashboardIcon />
+    },
+    {
+      title: "Download",
+      href: "/download",
+      icon: <CloudDownloadIcon />
     }
   ];
 
