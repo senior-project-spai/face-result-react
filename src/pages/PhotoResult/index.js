@@ -96,13 +96,15 @@ function FaceResultDisplay(props) {
 
   if (!responseData) return <Loading />;
 
+  const result = responseData["results"][0];
+
   return (
     <Box paddingY={3}>
       <Container maxWidth="lg" fixed>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Card>
-              <CardHeader title="Photo" />
+              <CardHeader title="Image" />
               <Divider />
               <Box overflow="hidden" bgcolor="grey.100">
                 <img
@@ -115,14 +117,17 @@ function FaceResultDisplay(props) {
           </Grid>
           <Grid item xs={12} md={6}>
             <Card>
-              <CardHeader title="Detail" />
+              <CardHeader title="Details" />
               <Divider />
               <List>
                 <ListItem>
                   <ListItemIcon>
                     <FaceIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Face Image ID" secondary={responseData["id"]} />
+                  <ListItemText
+                    primary="Face Image ID"
+                    secondary={responseData["id"]}
+                  />
                 </ListItem>
                 <Divider />
                 <ListItem>
@@ -164,45 +169,43 @@ function FaceResultDisplay(props) {
           </Grid>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Inferences" />
+              <CardHeader title="Analytics" />
               <Divider />
               <TableContainer>
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>No.</TableCell>
-                      <TableCell>Gender</TableCell>
-                      <TableCell>Confidence</TableCell>
-                      <TableCell>Age</TableCell>
-                      <TableCell>Confidence</TableCell>
-                      <TableCell>Race</TableCell>
+                      <TableCell>Type</TableCell>
+                      <TableCell>Result</TableCell>
                       <TableCell>Confidence</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {responseData["results"].map((result, index) => (
-                      <TableRow key={index}>
-                        <TableCell component="th">{index}</TableCell>
-                        <TableCell>{result["gender"]["type"]}</TableCell>
-                        <TableCell>
-                          {Math.round(result["gender"]["confidence"] * 10000) /
-                            100}{" "}
-                          %
-                        </TableCell>
-                        <TableCell>{`${result["age"]["min_age"]} - ${result["age"]["max_age"]}`}</TableCell>
-                        <TableCell>
-                          {Math.round(result["age"]["confidence"] * 10000) /
-                            100}{" "}
-                          %
-                        </TableCell>
-                        <TableCell>{result["race"]["type"]}</TableCell>
-                        <TableCell>
-                          {Math.round(result["race"]["confidence"] * 10000) /
-                            100}{" "}
-                          %
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    <TableRow>
+                      <TableCell component="th">Gender</TableCell>
+                      <TableCell>{result["gender"]["type"]}</TableCell>
+                      <TableCell>
+                        {Math.round(result["gender"]["confidence"] * 10000) /
+                          100}{" "}
+                        %
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th">Age</TableCell>
+                      <TableCell>{`${result["age"]["min_age"]} - ${result["age"]["max_age"]}`}</TableCell>
+                      <TableCell>
+                        {Math.round(result["age"]["confidence"] * 10000) / 100}{" "}
+                        %
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th">Race</TableCell>
+                      <TableCell>{result["race"]["type"]}</TableCell>
+                      <TableCell>
+                        {Math.round(result["race"]["confidence"] * 10000) / 100}{" "}
+                        %
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
