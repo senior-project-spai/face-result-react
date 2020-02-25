@@ -23,11 +23,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import LinkedCameraIcon from "@material-ui/icons/LinkedCamera";
 import StoreIcon from "@material-ui/icons/Store";
 import HistoryIcon from "@material-ui/icons/History";
+import FaceIcon from "@material-ui/icons/Face";
 
 import Loading from "./Loading";
 
 // MOCK
-// import { response as MOCK_RESPONSE } from "./mock";
 // import MOCK_RESPONSE from './MOCK-RESULT.json'
 
 const FACE_RESULT_API_URL =
@@ -120,6 +120,13 @@ function FaceResultDisplay(props) {
               <List>
                 <ListItem>
                   <ListItemIcon>
+                    <FaceIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Face Image ID" secondary={responseData["id"]} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemIcon>
                     <HistoryIcon />
                   </ListItemIcon>
                   <ListItemText
@@ -179,17 +186,20 @@ function FaceResultDisplay(props) {
                         <TableCell>{result["gender"]["type"]}</TableCell>
                         <TableCell>
                           {Math.round(result["gender"]["confidence"] * 10000) /
-                            100} %
+                            100}{" "}
+                          %
                         </TableCell>
                         <TableCell>{`${result["age"]["min_age"]} - ${result["age"]["max_age"]}`}</TableCell>
                         <TableCell>
                           {Math.round(result["age"]["confidence"] * 10000) /
-                            100} %
+                            100}{" "}
+                          %
                         </TableCell>
                         <TableCell>{result["race"]["type"]}</TableCell>
                         <TableCell>
                           {Math.round(result["race"]["confidence"] * 10000) /
-                            100} %
+                            100}{" "}
+                          %
                         </TableCell>
                       </TableRow>
                     ))}
