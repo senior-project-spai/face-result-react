@@ -28,6 +28,7 @@ import Loading from "./Loading";
 
 // MOCK
 // import { response as MOCK_RESPONSE } from "./mock";
+// import MOCK_RESPONSE from './MOCK-RESULT.json'
 
 const FACE_RESULT_API_URL =
   "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/latest";
@@ -164,9 +165,11 @@ function FaceResultDisplay(props) {
                     <TableRow>
                       <TableCell>No.</TableCell>
                       <TableCell>Gender</TableCell>
-                      <TableCell>Confidence (%)</TableCell>
+                      <TableCell>Confidence</TableCell>
+                      <TableCell>Age</TableCell>
+                      <TableCell>Confidence</TableCell>
                       <TableCell>Race</TableCell>
-                      <TableCell>Confidence (%)</TableCell>
+                      <TableCell>Confidence</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -176,12 +179,17 @@ function FaceResultDisplay(props) {
                         <TableCell>{result["gender"]["type"]}</TableCell>
                         <TableCell>
                           {Math.round(result["gender"]["confidence"] * 10000) /
-                            100}
+                            100} %
+                        </TableCell>
+                        <TableCell>{`${result["age"]["min_age"]} - ${result["age"]["max_age"]}`}</TableCell>
+                        <TableCell>
+                          {Math.round(result["age"]["confidence"] * 10000) /
+                            100} %
                         </TableCell>
                         <TableCell>{result["race"]["type"]}</TableCell>
                         <TableCell>
                           {Math.round(result["race"]["confidence"] * 10000) /
-                            100}
+                            100} %
                         </TableCell>
                       </TableRow>
                     ))}
