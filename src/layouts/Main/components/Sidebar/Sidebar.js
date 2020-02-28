@@ -40,7 +40,7 @@ const Sidebar = props => {
   const pages = [
     {
       title: "Photo Result",
-      href: "/result",
+      href: "/result/latest",
       icon: <ImageIcon />
     },
     {

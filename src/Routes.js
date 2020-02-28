@@ -9,13 +9,13 @@ import MainLayout from "./layouts/Main";
 const Routes = props => {
   return (
     <Switch>
-      <Redirect exact from="/" to="/result" />
+      <Redirect exact from="/" to="/result/latest" />
       <Route
         exact
-        path="/result"
+        path="/result/:id"
         render={matchProps => (
           <MainLayout>
-            <PhotoResultPage />
+            <PhotoResultPage faceImageID={matchProps.match.params.id}/>
           </MainLayout>
         )}
       />

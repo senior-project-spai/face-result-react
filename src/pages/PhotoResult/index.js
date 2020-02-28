@@ -31,7 +31,7 @@ import Loading from "./Loading";
 // import MOCK_RESPONSE from './MOCK-RESULT.json'
 
 const FACE_RESULT_API_URL =
-  "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/latest";
+  "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/";
 
 const useStyles = makeStyles(theme => ({
   imgResponsive: {
@@ -66,6 +66,8 @@ function useMyInterval(callback, delay) {
 }
 
 function FaceResultDisplay(props) {
+  const faceImageID = props.faceImageID
+
   const [fetchError, setFetchError] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [responseData, setResponseData] = useState(undefined);
@@ -80,7 +82,7 @@ function FaceResultDisplay(props) {
       // setFetching(false);
       // return;
       /* -------------------------------------------------------------------------- */
-      const res = await fetch(FACE_RESULT_API_URL);
+      const res = await fetch(FACE_RESULT_API_URL + faceImageID);
       const json = await res.json();
       setResponseData(json);
     } catch (error) {
