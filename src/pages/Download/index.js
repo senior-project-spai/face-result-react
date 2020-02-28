@@ -7,7 +7,12 @@ import {
   Grid,
   ExpansionPanel,
   ExpansionPanelSummary,
-  useTheme
+  useTheme,
+  ExpansionPanelDetails,
+  Typography,
+  Divider,
+  ExpansionPanelActions,
+  TextField
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DateFnsUtils from "@date-io/date-fns";
@@ -49,11 +54,29 @@ const DownloadPage = props => {
   return (
     <Box paddingY={3}>
       <Container maxWidth="lg" fixed>
-        <ExpansionPanel>
-          <form>
+        <ExpansionPanel defaultExpanded>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="h6">Options Panel</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <Grid container alignItems="center" spacing={2}>
+                <Grid container alignItems="center" spacing={3}>
+                  <Grid item container xs={12} spacing={3}>
+                    <Grid item xs={12} sm={4}>
+                      <TextField
+                        label="Branch ID"
+                        variant="outlined"
+                        fullWidth
+                      ></TextField>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <TextField
+                        label="Camera ID"
+                        variant="outlined"
+                        fullWidth
+                      ></TextField>
+                    </Grid>
+                  </Grid>
                   <Grid item md="auto" xs={12}>
                     <KeyboardDateTimePicker
                       label="Start"
@@ -70,22 +93,22 @@ const DownloadPage = props => {
                       onChange={setEndDateTime}
                     />
                   </Grid>
-                  <Grid item xs={12} md="auto">
-                    <Button
-                      variant="contained"
-                      disableElevation
-                      size="large"
-                      color="primary"
-                      fullWidth
-                      onClick={onClickDownloadButton}
-                    >
-                      Download
-                    </Button>
-                  </Grid>
                 </Grid>
-              </ExpansionPanelSummary>
             </MuiPickersUtilsProvider>
-          </form>
+          </ExpansionPanelDetails>
+          <Divider />
+          <ExpansionPanelActions>
+            <Button disableElevation color="secondary">
+              View
+            </Button>
+            <Button
+              disableElevation
+              color="primary"
+              onClick={onClickDownloadButton}
+            >
+              Download
+            </Button>
+          </ExpansionPanelActions>
         </ExpansionPanel>
       </Container>
     </Box>
