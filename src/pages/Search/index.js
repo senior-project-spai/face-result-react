@@ -33,39 +33,40 @@ import csv from "csvtojson";
 const FACE_RESULT_API_CSV_URL =
   "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/csv";
 
-const FACE_RESULT_API_URL =
-  "result/";
+const FACE_RESULT_API_URL = "result/";
 
-const DownloadPage = props => {
-  const [startDateTime, setStartDateTime] = useState();
-  const [endDateTime, setEndDateTime] = useState();
+const SearchPage = props => {
+  const [startDateTime, setStartDateTime] = useState(null);
+  const [endDateTime, setEndDateTime] = useState(new Date());
+  const [branchID, setBranchID] = useState();
+  const [cameraID, setCameraID] = useState();
   const [resultData, setResultData] = useState();
 
-  const downloadCSV = async () => {
+  const getCSVResponse = async () => {
     const data = {
       ...(startDateTime && { start: startDateTime.getTime() / 1000 }),
-      ...(endDateTime && { end: endDateTime.getTime() / 1000 })
+      ...(endDateTime && { end: endDateTime.getTime() / 1000 }),
+      ...(cameraID && { camera: cameraID }),
+      ...(branchID && { branch: branchID })
     };
 
-    // HACK: Download file with ajax
     const response = await fetch(
       `${FACE_RESULT_API_CSV_URL}?${new URLSearchParams(data).toString()}`
     );
+    return response;
+  };
+
+  const downloadCSV = async () => {
+    // HACK: Download file with ajax
+    const response = await getCSVResponse();
     window.location.href = response.url;
   };
 
   const viewCSV = async () => {
-    const data = {
-      ...(startDateTime && { start: startDateTime.getTime() / 1000 }),
-      ...(endDateTime && { end: endDateTime.getTime() / 1000 })
-    };
-
-    const response = await fetch(
-      `${FACE_RESULT_API_CSV_URL}?${new URLSearchParams(data).toString()}`
-    );
+    const response = await getCSVResponse();
     const csvText = await response.text();
-    const csvRow = await csv().fromString(csvText)
-    setResultData(csvRow)
+    const csvRow = await csv().fromString(csvText);
+    setResultData(csvRow);
   };
 
   /* -------------------------------------------------------------------------- */
@@ -99,6 +100,7 @@ const DownloadPage = props => {
                       label="Branch ID"
                       variant="outlined"
                       fullWidth
+                      onChange={e => setBranchID(e.target.value)}
                     ></TextField>
                   </Grid>
                   <Grid item xs={12} sm={4}>
@@ -106,12 +108,14 @@ const DownloadPage = props => {
                       label="Camera ID"
                       variant="outlined"
                       fullWidth
+                      onChange={e => setCameraID(e.target.value)}
                     ></TextField>
                   </Grid>
                 </Grid>
                 <Grid item md="auto" xs={12}>
                   <KeyboardDateTimePicker
-                    label="Start"
+                    label="From"
+                    value={startDateTime}
                     inputVariant="outlined"
                     fullWidth
                     onChange={setStartDateTime}
@@ -119,10 +123,12 @@ const DownloadPage = props => {
                 </Grid>
                 <Grid item xs={12} md>
                   <KeyboardDateTimePicker
-                    label="End"
+                    label="To"
+                    value={endDateTime}
                     inputVariant="outlined"
                     fullWidth={!isBreakpointLG}
                     onChange={setEndDateTime}
+                    showTodayButton
                   />
                 </Grid>
               </Grid>
@@ -161,7 +167,12 @@ const DownloadPage = props => {
                 </TableHead>
                 <TableBody>
                   {resultData.map(row => (
-                    <TableRow key={row.id} onClick={event => window.location.href = FACE_RESULT_API_URL + row.id}>
+                    <TableRow
+                      key={row.id}
+                      onClick={event =>
+                        (window.location.href = FACE_RESULT_API_URL + row.id)
+                      }
+                    >
                       {Object.keys(row).map(key => (
                         <TableCell key={key}>{row[key]}</TableCell>
                       ))}
@@ -177,4 +188,4 @@ const DownloadPage = props => {
   );
 };
 
-export default DownloadPage;
+export default SearchPage;

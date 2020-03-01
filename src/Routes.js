@@ -3,7 +3,7 @@ import { Switch, Redirect, Route } from "react-router-dom";
 
 import PhotoResultPage from "./pages/PhotoResult";
 import DashboardPage from "./pages/Dashboard";
-import DownloadPage from "./pages/Download";
+import SearchPage from "./pages/Search";
 import MainLayout from "./layouts/Main";
 
 const Routes = props => {
@@ -30,10 +30,10 @@ const Routes = props => {
       />
       <Route
         exact
-        path="/download"
+        path="/search"
         render={matchProps => (
           <MainLayout>
-            <DownloadPage />
+            <SearchPage />
           </MainLayout>
         )}
       />
