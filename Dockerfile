@@ -11,4 +11,4 @@ FROM nginx:1.15
 COPY --from=builder /app/build/ /usr/share/nginx/html
 COPY --from=builder /nginx.conf /etc/nginx/conf.d/default.conf
 
-
+EXPOSE 80
