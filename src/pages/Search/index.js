@@ -31,7 +31,7 @@ import {
 import csv from "csvtojson";
 
 const FACE_RESULT_API_CSV_URL =
-  "https://35.247.142.251/_api/result/csv";
+  "http://35.247.142.251/_api/result/csv";
 
 const FACE_RESULT_API_URL = "result/";
 
