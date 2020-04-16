@@ -31,7 +31,7 @@ import Loading from "./Loading";
 // import MOCK_RESPONSE from './MOCK-RESULT.json'
 
 const FACE_RESULT_API_URL =
-  "https://35.247.142.251/_api/result/";
+  "http://35.247.142.251/_api/result/";
 
 const useStyles = makeStyles(theme => ({
   imgResponsive: {
