@@ -36,7 +36,8 @@ const FACE_RESULT_API_URL =
 const useStyles = makeStyles(theme => ({
   imgResponsive: {
     display: "block",
-    width: "100%",
+    maxWidth: "100%",
+    maxHeight: "36em",
     margin: "auto"
   },
   dataPaper: {
