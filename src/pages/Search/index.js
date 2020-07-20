@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   Box,
   Card,
@@ -29,11 +28,12 @@ import {
   KeyboardDateTimePicker
 } from "@material-ui/pickers";
 import csv from "csvtojson";
+import { useHistory } from 'react-router-dom';
 
 const FACE_RESULT_API_CSV_URL =
   process.env.REACT_APP_FACE_RESULT_API_CSV_URL || "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/csv";
 
-const FACE_RESULT_API_URL = "result/";
+const FACE_RESULT_API_URL = "/result";
 
 const SearchPage = props => {
   const [startDateTime, setStartDateTime] = useState(null);
@@ -68,6 +68,8 @@ const SearchPage = props => {
     const csvRow = await csv().fromString(csvText);
     setResultData(csvRow);
   };
+  
+  const history = useHistory();
 
   /* -------------------------------------------------------------------------- */
 
@@ -169,9 +171,7 @@ const SearchPage = props => {
                   {resultData.map(row => (
                     <TableRow
                       key={row.id}
-                      onClick={event =>
-                        (window.location.href = FACE_RESULT_API_URL + row.ID)
-                      }
+                      onClick={event => history.push(`${FACE_RESULT_API_URL}/${row.ID}`)}
                     >
                       {Object.keys(row).map(key => (
                         <TableCell key={key}>{row[key]}</TableCell>
