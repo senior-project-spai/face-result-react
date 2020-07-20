@@ -170,7 +170,7 @@ const SearchPage = props => {
                     <TableRow
                       key={row.id}
                       onClick={event =>
-                        (window.location.href = FACE_RESULT_API_URL + row.id)
+                        (window.location.href = FACE_RESULT_API_URL + row.ID)
                       }
                     >
                       {Object.keys(row).map(key => (
