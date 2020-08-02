@@ -20,23 +20,24 @@ import {
   Typography,
   Divider,
   ExpansionPanelActions,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDateTimePicker
+  KeyboardDateTimePicker,
 } from "@material-ui/pickers";
 import csv from "csvtojson";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 const FACE_RESULT_API_CSV_URL =
-  process.env.REACT_APP_FACE_RESULT_API_CSV_URL || "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/csv";
+  process.env.REACT_APP_FACE_RESULT_API_CSV_URL ||
+  "https://face-result-api-fastapi-spai.apps.spai.ml/_api/result/csv";
 
 const FACE_RESULT_API_URL = "/result";
 
-const SearchPage = props => {
+const SearchPage = (props) => {
   const [startDateTime, setStartDateTime] = useState(null);
   const [endDateTime, setEndDateTime] = useState(new Date());
   const [branchID, setBranchID] = useState();
@@ -48,7 +49,7 @@ const SearchPage = props => {
       ...(startDateTime && { start: startDateTime.getTime() / 1000 }),
       ...(endDateTime && { end: endDateTime.getTime() / 1000 }),
       ...(cameraID && { camera: cameraID }),
-      ...(branchID && { branch: branchID })
+      ...(branchID && { branch: branchID }),
     };
 
     const response = await fetch(
@@ -69,17 +70,17 @@ const SearchPage = props => {
     const csvRow = await csv().fromString(csvText);
     setResultData(csvRow);
   };
-  
+
   const history = useHistory();
 
   /* -------------------------------------------------------------------------- */
 
-  const onClickDownloadButton = event => {
+  const onClickDownloadButton = (event) => {
     event.preventDefault();
     downloadCSV();
   };
 
-  const onClickViewButton = event => {
+  const onClickViewButton = (event) => {
     event.preventDefault();
     viewCSV();
   };
@@ -103,7 +104,7 @@ const SearchPage = props => {
                       label="Branch ID"
                       variant="outlined"
                       fullWidth
-                      onChange={e => setBranchID(e.target.value)}
+                      onChange={(e) => setBranchID(e.target.value)}
                     ></TextField>
                   </Grid>
                   <Grid item xs={12} sm={4}>
@@ -111,7 +112,7 @@ const SearchPage = props => {
                       label="Camera ID"
                       variant="outlined"
                       fullWidth
-                      onChange={e => setCameraID(e.target.value)}
+                      onChange={(e) => setCameraID(e.target.value)}
                     ></TextField>
                   </Grid>
                 </Grid>
@@ -163,20 +164,26 @@ const SearchPage = props => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    {Object.keys(resultData[0]).map(key => (
+                    {Object.keys(resultData[0]).map((key) => (
                       <TableCell key={key}>{key}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {resultData.map(row => (
+                  {resultData.map((row) => (
                     <TableRow
                       key={row.id}
-                      onClick={event => history.push(`${FACE_RESULT_API_URL}/${row.ID}`)}
+                      onClick={(event) =>
+                        history.push(`${FACE_RESULT_API_URL}/${row.ID}`)
+                      }
                     >
-                      {Object.keys(row).map(key => (
-                        <TableCell key={key}>{row[key]}</TableCell>
-                      ))}
+                      {Object.keys(row).map((key) => {
+                        const value =
+                          key === "Time"
+                            ? new Date(row[key]).toLocaleDateString()
+                            : row[key];
+                        return <TableCell key={key}>{value}</TableCell>;
+                      })}
                     </TableRow>
                   ))}
                 </TableBody>
