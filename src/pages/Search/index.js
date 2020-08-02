@@ -180,7 +180,7 @@ const SearchPage = (props) => {
                       {Object.keys(row).map((key) => {
                         const value =
                           key === "Time"
-                            ? new Date(row[key]).toLocaleDateString()
+                            ? new Date(row[key] * 1000).toLocaleDateString()
                             : row[key];
                         return <TableCell key={key}>{value}</TableCell>;
                       })}
