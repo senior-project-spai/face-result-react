@@ -31,7 +31,7 @@ import NARA_FACES from "./MOCK/response_face-result-api_nara-thai_faces";
 import TWO_PERSON_IMAGE from "./MOCK/response_face-result-api_two-person_image";
 import TWO_PERSON_FACES from "./MOCK/response_face-result-api_two-person_faces";
 
-const FACE_RESULT_IMAGE_API_URL = "http://face-result-api-fastapi-spai.apps.spai.ml/_api/images";
+const FACE_RESULT_IMAGE_API_URL = "http://face-result-api-spai.apps.spai.ml/_api/images";
 
 const useImageAPI = () => {
   const [image, setImage] = useState();
