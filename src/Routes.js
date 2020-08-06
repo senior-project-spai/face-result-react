@@ -5,24 +5,25 @@ import PhotoResultPage from "./pages/PhotoResult";
 import DashboardPage from "./pages/Dashboard";
 import SearchPage from "./pages/Search";
 import MainLayout from "./layouts/Main";
+import ImagePage from "./pages/Image";
 
-const Routes = props => {
+const Routes = (props) => {
   return (
     <Switch>
       <Redirect exact from="/" to="/result/latest" />
       <Route
         exact
         path="/result/:id"
-        render={matchProps => (
+        render={(matchProps) => (
           <MainLayout>
-            <PhotoResultPage faceImageID={matchProps.match.params.id}/>
+            <PhotoResultPage faceImageID={matchProps.match.params.id} />
           </MainLayout>
         )}
       />
       <Route
         exact
         path="/dashboard"
-        render={matchProps => (
+        render={(matchProps) => (
           <MainLayout>
             <DashboardPage />
           </MainLayout>
@@ -31,12 +32,17 @@ const Routes = props => {
       <Route
         exact
         path="/search"
-        render={matchProps => (
+        render={(matchProps) => (
           <MainLayout>
             <SearchPage />
           </MainLayout>
         )}
       />
+      <Route exact path="/images/latest">
+        <MainLayout>
+          <ImagePage />
+        </MainLayout>
+      </Route>
     </Switch>
   );
 };
