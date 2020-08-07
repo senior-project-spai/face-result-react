@@ -38,7 +38,7 @@ const Routes = (props) => {
           </MainLayout>
         )}
       />
-      <Route exact path="/images/latest">
+      <Route path="/images/:imageID">
         <MainLayout>
           <ImagePage />
         </MainLayout>

@@ -30,10 +30,12 @@ import NARA_IMAGE from "./MOCK/response_face-result-api_nara-thai_image";
 import NARA_FACES from "./MOCK/response_face-result-api_nara-thai_faces";
 import TWO_PERSON_IMAGE from "./MOCK/response_face-result-api_two-person_image";
 import TWO_PERSON_FACES from "./MOCK/response_face-result-api_two-person_faces";
+import { useParams } from "react-router";
 
-const FACE_RESULT_IMAGE_API_URL = "http://face-result-api-spai.apps.spai.ml/_api/images";
+const FACE_RESULT_IMAGE_API_URL =
+  "http://face-result-api-spai.apps.spai.ml/_api/images";
 
-const useImageAPI = () => {
+const useImageAPI = (imageID = "latest") => {
   const [image, setImage] = useState();
   const [faces, setFaces] = useState();
 
@@ -43,13 +45,16 @@ const useImageAPI = () => {
   useEffect(() => {
     // Fetch Image
     (async () => {
+      setIsFetching(true);
       try {
         // setImage(TWO_PERSON_IMAGE);
         // setFaces(TWO_PERSON_FACES);
-        const imageRes = await fetch(`${FACE_RESULT_IMAGE_API_URL}/latest`)
-        setImage(await imageRes.json())
-        const facesRes = await fetch(`${FACE_RESULT_IMAGE_API_URL}/latest/faces`)
-        setFaces(await facesRes.json())
+        const imageRes = await fetch(`${FACE_RESULT_IMAGE_API_URL}/${imageID}`);
+        setImage(await imageRes.json());
+        const facesRes = await fetch(
+          `${FACE_RESULT_IMAGE_API_URL}/${imageID}/faces`
+        );
+        setFaces(await facesRes.json());
         // setImage(NARA_IMAGE);
         // setFaces(NARA_FACES);
       } catch (error) {
@@ -57,7 +62,7 @@ const useImageAPI = () => {
       }
       setIsFetching(false);
     })();
-  }, []);
+  }, [imageID]);
 
   return [image, faces, isFetching];
 };
@@ -72,7 +77,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default (props) => {
-  const [image, faces, isImageAPIFetching] = useImageAPI();
+  const { imageID } = useParams();
+
+  const [image, faces, isImageAPIFetching] = useImageAPI(imageID);
 
   const classes = useStyles();
 
