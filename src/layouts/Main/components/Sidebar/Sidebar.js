@@ -64,6 +64,7 @@ const Sidebar = (props) => {
       title: "Image List",
       href: "/images",
       icon: <ListIcon />,
+      exact: true,
     },
   ];
 
