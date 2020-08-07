@@ -35,6 +35,22 @@ import { useParams } from "react-router";
 const FACE_RESULT_IMAGE_API_URL =
   "http://face-result-api-spai.apps.spai.ml/_api/images";
 
+function findMaxValues(obj) {
+  const isAllNumber = Object.values(obj).every((value) => {
+    console.log(value);
+    console.log(typeof value === "number");
+    return typeof value === "number";
+  });
+
+  if (!isAllNumber) return null;
+
+  const keyOfMaxValue = Object.keys(obj).reduce((prev, cur) =>
+    obj[cur] > obj[prev] ? cur : prev
+  );
+
+  return keyOfMaxValue;
+}
+
 const useImageAPI = (imageID = "latest") => {
   const [image, setImage] = useState();
   const [faces, setFaces] = useState();
@@ -167,11 +183,7 @@ export default (props) => {
                         Male: face["male_confidence"],
                         Female: face["female_confidence"],
                       };
-                      const gender = Object.keys(
-                        gender_obj
-                      ).reduce((prev, cur) =>
-                        gender_obj[cur] > gender_obj[prev] ? cur : prev
-                      );
+                      const gender = findMaxValues(gender_obj);
 
                       // Find max confidence of age
                       const age_obj = {
@@ -184,9 +196,7 @@ export default (props) => {
                         "61 - 70": face["61_to_70_confidence"],
                         "71 - 100": face["71_to_100_confidence"],
                       };
-                      const age = Object.keys(age_obj).reduce((prev, cur) =>
-                        age_obj[cur] > age_obj[prev] ? cur : prev
-                      );
+                      const age = findMaxValues(age_obj);
 
                       // Find max confidence of emotion
                       const emotion_obj = {
@@ -199,11 +209,7 @@ export default (props) => {
                         sad: face["sad_confidence"],
                         surprised: face["surprised_confidence"],
                       };
-                      const emotion = Object.keys(
-                        emotion_obj
-                      ).reduce((prev, cur) =>
-                        emotion_obj[cur] > emotion_obj[prev] ? cur : prev
-                      );
+                      const emotion = findMaxValues(emotion_obj);
 
                       return (
                         <TableRow>
