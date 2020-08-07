@@ -7,6 +7,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import ImageIcon from "@material-ui/icons/Image";
 import ImageSearchIcon from "@material-ui/icons/ImageSearch";
 import ImageTwoToneIcon from "@material-ui/icons/ImageTwoTone";
+import ListIcon from "@material-ui/icons/List";
 
 import { SidebarNav } from "./components";
 
@@ -58,6 +59,11 @@ const Sidebar = (props) => {
       title: "Image",
       href: "/images/latest",
       icon: <ImageTwoToneIcon />,
+    },
+    {
+      title: "Image List",
+      href: "/images",
+      icon: <ListIcon />,
     },
   ];
 

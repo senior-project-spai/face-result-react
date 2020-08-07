@@ -6,6 +6,7 @@ import DashboardPage from "./pages/Dashboard";
 import SearchPage from "./pages/Search";
 import MainLayout from "./layouts/Main";
 import ImagePage from "./pages/Image";
+import ImageListPage from "./pages/ImageList";
 
 const Routes = (props) => {
   return (
@@ -38,6 +39,11 @@ const Routes = (props) => {
           </MainLayout>
         )}
       />
+      <Route path="/images" exact>
+        <MainLayout>
+          <ImageListPage />
+        </MainLayout>
+      </Route>
       <Route path="/images/:imageID">
         <MainLayout>
           <ImagePage />
