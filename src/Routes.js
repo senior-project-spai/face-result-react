@@ -11,7 +11,6 @@ import ImageListPage from "./pages/ImageList";
 const Routes = (props) => {
   return (
     <Switch>
-      <Redirect exact from="/" to="/result/latest" />
       <Route
         exact
         path="/result/:id"
@@ -48,6 +47,10 @@ const Routes = (props) => {
         <MainLayout>
           <ImagePage />
         </MainLayout>
+      </Route>
+      { /* Default route */ }
+      <Route path="/">
+        <MainLayout />
       </Route>
     </Switch>
   );
