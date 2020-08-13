@@ -97,6 +97,7 @@ const useImageAPI = (imageID = "latest") => {
 
           // Draw box for each face
           facesJSON.forEach((face, faceIndex) => {
+            ctx.beginPath()
             // Rectangle
             ctx.rect(
               face.position_left,
