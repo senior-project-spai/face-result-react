@@ -37,8 +37,6 @@ const FACE_RESULT_IMAGE_API_URL =
 
 function findMaxValues(obj) {
   const isAllNumber = Object.values(obj).every((value) => {
-    console.log(value);
-    console.log(typeof value === "number");
     return typeof value === "number";
   });
 
@@ -63,16 +61,65 @@ const useImageAPI = (imageID = "latest") => {
     (async () => {
       setIsFetching(true);
       try {
-        // setImage(TWO_PERSON_IMAGE);
-        // setFaces(TWO_PERSON_FACES);
-        const imageRes = await fetch(`${FACE_RESULT_IMAGE_API_URL}/${imageID}`);
-        setImage(await imageRes.json());
+        // Fetching Image data
+        const imageRes = await fetch(
+          `${FACE_RESULT_IMAGE_API_URL}/${imageID}`
+        ).then();
+        const imageJSON = await imageRes.json();
+        setImage(imageJSON);
+
+        // Fetching faces data
         const facesRes = await fetch(
           `${FACE_RESULT_IMAGE_API_URL}/${imageID}/faces`
         );
-        setFaces(await facesRes.json());
-        // setImage(NARA_IMAGE);
-        // setFaces(NARA_FACES);
+        const facesJSON = await facesRes.json();
+        setFaces(facesJSON);
+
+        /* Draw rectangle on image */
+        // Create HTMLImageElement
+        const originalImage = new Image();
+        originalImage.setAttribute("crossorigin", "anonymous");
+        originalImage.onload = () => {
+          // Create canvas
+          const canvas = document.createElement("canvas");
+          canvas.width = originalImage.width;
+          canvas.height = originalImage.height;
+
+          // Setup ctx
+          const ctx = canvas.getContext("2d");
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = "red";
+          ctx.fillStyle = "red";
+          ctx.textBaseline = "top";
+
+          // Draw an original image first
+          ctx.drawImage(originalImage, 0, 0);
+
+          // Draw box for each face
+          facesJSON.forEach((face, faceIndex) => {
+            // Rectangle
+            ctx.rect(
+              face.position_left,
+              face.position_top,
+              face.position_right - face.position_left,
+              face.position_bottom - face.position_top
+            );
+            ctx.stroke();
+            // Text
+            ctx.font = `${parseFloat(
+              (face.position_bottom - face.position_top) * 0.04 * 5
+            )}px Arial`;
+            ctx.fillText(
+              faceIndex.toString(),
+              face.position_left,
+              face.position_top
+            );
+          });
+          // Create new imageJson with new image
+          const newImageJSON = { ...imageJSON, data_uri: canvas.toDataURL() };
+          setImage(newImageJSON);
+        };
+        originalImage.src = imageJSON.data_uri;
       } catch (error) {
         console.error(error);
       }
@@ -212,7 +259,7 @@ export default (props) => {
                       const emotion = findMaxValues(emotion_obj);
 
                       return (
-                        <TableRow>
+                        <TableRow key={faceIndex}>
                           <TableCell>{faceIndex}</TableCell>
                           <TableCell>{face["label"] || "-"}</TableCell>
                           <TableCell>{`${gender}, ${(
