@@ -97,6 +97,8 @@ function FaceResultDisplay(props) {
 
   const classes = useStyles();
 
+  if (fetchError) return null
+
   if (!responseData) return <Loading />;
 
   const result = responseData["results"][0];
