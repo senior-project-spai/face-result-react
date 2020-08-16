@@ -49,6 +49,56 @@ function findMaxValues(obj) {
   return keyOfMaxValue;
 }
 
+const imageWithFaceBoxes = (imageURI, faces) => {
+  return new Promise((resolve, _) => {
+    /* Draw rectangle on image */
+    // Create HTMLImageElement
+    const originalImage = new Image();
+    originalImage.setAttribute("crossorigin", "anonymous");
+    originalImage.onload = () => {
+      // Create canvas
+      const canvas = document.createElement("canvas");
+      canvas.width = originalImage.width;
+      canvas.height = originalImage.height;
+
+      // Setup ctx
+      const ctx = canvas.getContext("2d");
+      ctx.lineWidth = Math.ceil(originalImage.height * 0.005);
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.textBaseline = "top";
+
+      // Draw an original image first
+      ctx.drawImage(originalImage, 0, 0);
+
+      // Draw box for each face
+      faces.forEach((face, faceIndex) => {
+        ctx.beginPath();
+        // Rectangle
+        ctx.rect(
+          face.position_left,
+          face.position_top,
+          face.position_right - face.position_left,
+          face.position_bottom - face.position_top
+        );
+        ctx.stroke();
+        // Text
+        ctx.font = `${parseFloat(
+          (face.position_bottom - face.position_top) * 0.04 * 5
+        )}px Arial`;
+        ctx.fillText(
+          faceIndex.toString(),
+          face.position_left,
+          face.position_top
+        );
+      });
+      // Create new imageJson with new image
+      resolve(canvas.toDataURL());
+    };
+    originalImage.src = imageURI;
+  });
+};
+
 const useImageAPI = (imageID = "latest") => {
   const [image, setImage] = useState();
   const [faces, setFaces] = useState();
@@ -62,9 +112,7 @@ const useImageAPI = (imageID = "latest") => {
       setIsFetching(true);
       try {
         // Fetching Image data
-        const imageRes = await fetch(
-          `${FACE_RESULT_IMAGE_API_URL}/${imageID}`
-        ).then();
+        const imageRes = await fetch(`${FACE_RESULT_IMAGE_API_URL}/${imageID}`);
         const imageJSON = await imageRes.json();
         setImage(imageJSON);
 
@@ -75,52 +123,12 @@ const useImageAPI = (imageID = "latest") => {
         const facesJSON = await facesRes.json();
         setFaces(facesJSON);
 
-        /* Draw rectangle on image */
-        // Create HTMLImageElement
-        const originalImage = new Image();
-        originalImage.setAttribute("crossorigin", "anonymous");
-        originalImage.onload = () => {
-          // Create canvas
-          const canvas = document.createElement("canvas");
-          canvas.width = originalImage.width;
-          canvas.height = originalImage.height;
-
-          // Setup ctx
-          const ctx = canvas.getContext("2d");
-          ctx.lineWidth = 4;
-          ctx.strokeStyle = "red";
-          ctx.fillStyle = "red";
-          ctx.textBaseline = "top";
-
-          // Draw an original image first
-          ctx.drawImage(originalImage, 0, 0);
-
-          // Draw box for each face
-          facesJSON.forEach((face, faceIndex) => {
-            ctx.beginPath()
-            // Rectangle
-            ctx.rect(
-              face.position_left,
-              face.position_top,
-              face.position_right - face.position_left,
-              face.position_bottom - face.position_top
-            );
-            ctx.stroke();
-            // Text
-            ctx.font = `${parseFloat(
-              (face.position_bottom - face.position_top) * 0.04 * 5
-            )}px Arial`;
-            ctx.fillText(
-              faceIndex.toString(),
-              face.position_left,
-              face.position_top
-            );
-          });
-          // Create new imageJson with new image
-          const newImageJSON = { ...imageJSON, data_uri: canvas.toDataURL() };
-          setImage(newImageJSON);
+        // Create new imageJson with face box image
+        const newImageJSON = {
+          ...imageJSON,
+          data_uri: await imageWithFaceBoxes(imageJSON.data_uri, facesJSON),
         };
-        originalImage.src = imageJSON.data_uri;
+        setImage(newImageJSON);
       } catch (error) {
         console.error(error);
       }
@@ -160,7 +168,7 @@ export default (props) => {
               <Divider />
               <Box overflow="hidden" bgcolor="grey.100">
                 <img
-                  alt="image"
+                  alt="preview"
                   src={image.data_uri}
                   className={classes.imgResponsive}
                 />
