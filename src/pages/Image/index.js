@@ -33,7 +33,7 @@ import TWO_PERSON_FACES from "./MOCK/response_face-result-api_two-person_faces";
 import { useParams } from "react-router";
 
 const FACE_RESULT_IMAGE_API_URL =
-  "http://face-result-api-spai.apps.spai.ml/_api/images";
+  process.env.REACT_APP_FACE_RESULT_IMAGE_API_URL || "http://face-result-api-spai.apps.spai.ml/_api/images";
 
 function findMaxValues(obj) {
   const isAllNumber = Object.values(obj).every((value) => {
