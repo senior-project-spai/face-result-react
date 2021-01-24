@@ -13,7 +13,7 @@ import {
 import { useHistory } from "react-router";
 
 const FACE_RESULT_IMAGE_API_URL =
-  "http://face-result-api-spai.apps.spai.ml/_api/images";
+  process.env.REACT_APP_IMAGE_RESULT_API_URL || "http://face-result-api-spai.apps.spai.ml/_api/images";
 
 export default (props) => {
   const history = useHistory();
